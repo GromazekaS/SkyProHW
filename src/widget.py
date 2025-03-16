@@ -11,6 +11,7 @@ def mask_account_card(data: str) -> str:
     result = data[:len(data) - len(temp[-1])] + mask
     return result
 
+
 def get_date(date: str) -> str:
     """Вернуть дату в формате ДД.ММ.ГГГГ"""
     temp = date.split('T')[0].split('-')

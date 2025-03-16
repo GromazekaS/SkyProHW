@@ -1,5 +1,5 @@
-from src.widget import mask_account_card, get_date
-from tests.test_card_account import input_data_test, date_test
+from src.widget import get_date, mask_account_card
+from tests.test_card_account import date_test, input_data_test
 
 
 def main() -> None:

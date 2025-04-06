@@ -6,5 +6,7 @@ def filter_by_state(records_to_filter: list, state='EXECUTED')-> list:
             result.append(item)
     return result
 
-def sort_by_date():
-    pass
+def sort_by_date(records_to_sort: list, reverse=False):
+    """Отсортировать записи в заданном порядке по полю 'date'"""
+    result = sorted(records_to_sort, key=lambda x: x['date'], reverse=reverse)
+    return  result

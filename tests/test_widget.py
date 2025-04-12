@@ -1,4 +1,5 @@
 import pytest
+
 from src.widget import get_date, mask_account_card
 from tests.conftest import card_acc_test, date_test
 

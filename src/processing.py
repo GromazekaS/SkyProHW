@@ -1,4 +1,4 @@
-def filter_by_state(records_to_filter: list, state: str = 'EXECUTED') -> list:
+def filter_by_state(records_to_filter: list[dict], state: str = 'EXECUTED') -> list:
     """Отфильтровать список словарей по полю 'state'"""
     result = []
     for item in records_to_filter:

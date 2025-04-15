@@ -1,4 +1,5 @@
 import pytest
+
 from src.generators import card_number_generator, filter_by_currency, transactions_description
 from tests.conftest import transactions_test
 
@@ -6,14 +7,14 @@ from tests.conftest import transactions_test
 def test_filter_by_currency() -> None:
     generator = filter_by_currency(transactions_test)
     assert next(generator) == {
-            "date": "2018-06-30T02:08:58.425572",
-            "description": "Перевод организации",
-            "from": "Счет 75106830613657916952",
-            "id": 939719570,
-            "operationAmount": {"amount": "9824.07", "currency": {"code": "USD", "name": "USD"}},
-            "state": "EXECUTED",
-            "to": "Счет 11776614605963066702",
-        }
+        "date": "2018-06-30T02:08:58.425572",
+        "description": "Перевод организации",
+        "from": "Счет 75106830613657916952",
+        "id": 939719570,
+        "operationAmount": {"amount": "9824.07", "currency": {"code": "USD", "name": "USD"}},
+        "state": "EXECUTED",
+        "to": "Счет 11776614605963066702",
+    }
     assert next(generator) == {
         "id": 142264268,
         "state": "EXECUTED",
@@ -35,35 +36,35 @@ def test_filter_by_currency() -> None:
     assert next(generator, {}) == {}
     generator = filter_by_currency(transactions_test, "RUB")
     assert next(generator) == {
-            "date": "2019-03-23T01:09:46.296404",
-            "description": "Перевод со счета на счет",
-            "from": "Счет 44812258784861134719",
-            "id": 873106923,
-            "operationAmount": {"amount": "43318.34", "currency": {"code": "RUB", "name": "руб."}},
-            "state": "EXECUTED",
-            "to": "Счет 74489636417521191160",
-        }
+        "date": "2019-03-23T01:09:46.296404",
+        "description": "Перевод со счета на счет",
+        "from": "Счет 44812258784861134719",
+        "id": 873106923,
+        "operationAmount": {"amount": "43318.34", "currency": {"code": "RUB", "name": "руб."}},
+        "state": "EXECUTED",
+        "to": "Счет 74489636417521191160",
+    }
     assert next(generator) == {
-            "date": "2018-09-12T21:27:25.241689",
-            "description": "Перевод организации",
-            "from": "Visa Platinum 1246377376343588",
-            "id": 594226727,
-            "operationAmount": {"amount": "67314.70", "currency": {"code": "RUB", "name": "руб."}},
-            "state": "CANCELED",
-            "to": "Счет 14211924144426031657",
-        }
+        "date": "2018-09-12T21:27:25.241689",
+        "description": "Перевод организации",
+        "from": "Visa Platinum 1246377376343588",
+        "id": 594226727,
+        "operationAmount": {"amount": "67314.70", "currency": {"code": "RUB", "name": "руб."}},
+        "state": "CANCELED",
+        "to": "Счет 14211924144426031657",
+    }
     generator = filter_by_currency(transactions_test, "EUR")
-    assert  next(generator, {})== {}
+    assert next(generator, {}) == {}
 
 
 def test_transaction_description() -> None:
     description = transactions_description(transactions_test)
-    assert  next(description) == "Перевод организации"
-    assert  next(description) == "Перевод со счета на счет"
-    assert  next(description) == "Перевод со счета на счет"
-    assert  next(description, {}) == "Перевод с карты на карту"
-    assert  next(description, {}) == "Перевод организации"
-    assert  next(description, "") == ""
+    assert next(description) == "Перевод организации"
+    assert next(description) == "Перевод со счета на счет"
+    assert next(description) == "Перевод со счета на счет"
+    assert next(description, {}) == "Перевод с карты на карту"
+    assert next(description, {}) == "Перевод организации"
+    assert next(description, "") == ""
 
 
 # Проверка корректности работы и правильности завершения

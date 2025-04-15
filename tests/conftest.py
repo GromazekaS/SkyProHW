@@ -1,3 +1,5 @@
+import pytest
+
 card_acc_test = [
     ("Maestro 1596837868705199", "Maestro 1596 83** **** 5199"),
     ("Счет 64686473678894779589", "Счет **9589"),
@@ -12,7 +14,9 @@ card_acc_test = [
 date_test = [("2024-03-11T02:26:18.671407", "11.03.2024"), ("2025-02-14T18:26:25.39273", "14.02.2025")]
 
 
-transactions_test = [
+@pytest.fixture
+def transactions_test():
+    return [
     {
         "id": 939719570,
         "state": "EXECUTED",

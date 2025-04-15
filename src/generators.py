@@ -2,11 +2,13 @@ import typing
 
 
 def filter_by_currency(transactions: list[dict], currency_code: str = "USD") -> typing.Generator[dict]:
-    return (x for x in transactions if x["operationAmount"]["currency"]["code"] == currency_code)
+    return iter(x for x in transactions if x["operationAmount"]["currency"]["code"] == currency_code)
 
 
 def transactions_description(transactions: list[dict]) -> typing.Generator[str]:
-    return (x["description"] for x in transactions)
+    gen = (x["description"] for x in transactions)
+    while True:
+        yield next(gen, "")
 
 
 def card_number_generator(first: int, last: int) -> typing.Generator[str]:

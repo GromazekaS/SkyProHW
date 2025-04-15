@@ -1,10 +1,9 @@
 import pytest
 
 from src.generators import card_number_generator, filter_by_currency, transactions_description
-from tests.conftest import transactions_test
 
 
-def test_filter_by_currency() -> None:
+def test_filter_by_currency(transactions_test: list[dict]) -> None:
     generator = filter_by_currency(transactions_test)
     assert next(generator) == {
         "date": "2018-06-30T02:08:58.425572",
@@ -57,7 +56,7 @@ def test_filter_by_currency() -> None:
     assert next(generator, {}) == {}
 
 
-def test_transaction_description() -> None:
+def test_transaction_description(transactions_test: list[dict]) -> None:
     description = transactions_description(transactions_test)
     assert next(description) == "Перевод организации"
     assert next(description) == "Перевод со счета на счет"

@@ -1,6 +1,7 @@
 import pytest
 
 from src.generators import card_number_generator, filter_by_currency, transactions_description
+from tests.conftest import trans_test
 
 
 def test_filter_by_currency(transactions_test: list[dict]) -> None:
@@ -64,6 +65,29 @@ def test_transaction_description(transactions_test: list[dict]) -> None:
     assert next(description, {}) == "Перевод с карты на карту"
     assert next(description, {}) == "Перевод организации"
     assert next(description, "") == ""
+
+
+# Вариант проверки функции через параметризацию
+descriptions_test = [
+    (
+        trans_test,
+        [
+            "Перевод организации",
+            "Перевод со счета на счет",
+            "Перевод со счета на счет",
+            "Перевод с карты на карту",
+            "Перевод организации",
+        ],
+    )
+]
+
+
+@pytest.mark.parametrize("transactions_list, expected", descriptions_test)
+def test_transaction_description_param(transactions_list: list[dict], expected: list[str]) -> None:
+    description = transactions_description(transactions_list)
+
+    for i in range(5):
+        assert next(description) == expected[i]
 
 
 # Проверка корректности работы и правильности завершения

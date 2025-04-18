@@ -6,6 +6,8 @@
 def main() -> None:
     """Основная часть программы!!!"""
     pass
+
+
 #    for test in input_data_test:
 #        print(mask_account_card(test))
 #    for test in date_test:

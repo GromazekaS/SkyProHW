@@ -1,5 +1,5 @@
 from src.widget import get_date, mask_account_card
-from time import sleep
+
 # from src.processing import filter_by_state, sort_by_date
 # from tests.conftest import processing_test  # , date_test, input_data_test
 

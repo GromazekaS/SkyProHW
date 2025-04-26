@@ -1,13 +1,13 @@
 import pytest
 
-from src.widget import get_date
 from src.decorators import log
+from src.widget import get_date
 
 
 def test_log(capsys):
     get_date("2024-03-11T02:26:18.671407")
     captured = capsys.readouterr()
-    assert captured.out.split('\n')[1] == "get_date успешно завершена. Результат: 11.03.2024"
+    assert captured.out.split("\n")[1] == "get_date успешно завершена. Результат: 11.03.2024"
 
 
 def test_console_logging(capsys):
@@ -17,7 +17,7 @@ def test_console_logging(capsys):
 
     test_func(5)
     captured = capsys.readouterr()
-    assert 'test_func успешно завершена. Результат: 10' in captured.out
+    assert "test_func успешно завершена. Результат: 10" in captured.out
 
 
 def test_file_logging():
@@ -29,9 +29,9 @@ def test_file_logging():
 
     test_func()
 
-    with open(log_file, 'r', encoding="utf-8") as f:
+    with open(log_file, "r", encoding="utf-8") as f:
         content = f.read()
-        assert 'test_func успешно завершена. Результат: 42' in content
+        assert "test_func успешно завершена. Результат: 42" in content
 
 
 def test_error_logging(capsys):

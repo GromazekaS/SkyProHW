@@ -2,7 +2,7 @@ from src.decorators import log, timing
 from src.masks import get_mask_account, get_mask_card_number
 
 
-@log('log_widget.txt')
+@log("log_widget.txt")
 @timing
 def mask_account_card(data: str) -> str:
     """Завернуть номер счета или карты в маску"""

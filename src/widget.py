@@ -1,6 +1,9 @@
+from src.decorators import log, timing
 from src.masks import get_mask_account, get_mask_card_number
 
 
+@log("log_widget.txt")
+@timing
 def mask_account_card(data: str) -> str:
     """Завернуть номер счета или карты в маску"""
     temp = data.split()
@@ -12,6 +15,8 @@ def mask_account_card(data: str) -> str:
     return result
 
 
+@log(None)
+@timing
 def get_date(date: str) -> str:
     """Вернуть дату в формате ДД.ММ.ГГГГ"""
     temp = date.split("T")[0].split("-")

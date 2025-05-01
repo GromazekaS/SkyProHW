@@ -4,17 +4,19 @@ import requests
 
 load_dotenv()
 
-apilayer_api_key = os.getenv("API_KEY")
 
 
 def convert_currency(amount, form_currency, to_currency) -> float:
     """Вернуть сумму после конвертации по текущему курсу на https://api.apilayer.com"""
+    # Для возможности тестирования приходится присвоение api-ключа делать внутри функции, иначе придется светить его в тестах
+    apilayer_api_key = os.getenv("API_KEY")
+
     url = f"https://api.apilayer.com/currency_data/convert?to={to_currency}&from={form_currency}&amount={amount}"
 
-    payload = {}
     headers = {
         "apikey": apilayer_api_key
     }
+    payload = {}
 
     response = requests.request("GET", url, headers=headers, data=payload)
 

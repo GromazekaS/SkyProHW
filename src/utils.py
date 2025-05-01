@@ -1,7 +1,5 @@
 import json
-import os
 from pprint import pprint
-from dotenv import load_dotenv
 from src.external_api import convert_currency
 
 
@@ -36,15 +34,15 @@ def calculate_transaction_amount(transaction: dict, dist_currency: str='RUB') ->
     amount = transaction["operationAmount"]["amount"]
     from_cur = transaction["operationAmount"]["currency"]["code"]
     if from_cur == dist_currency:
-        result = amount
+        res = amount
         print(f'Конвертация не требуется. {amount} {dist_currency}')
     else:
-        result = convert_currency(amount, from_cur, dist_currency)
+        res = convert_currency(amount, from_cur, dist_currency)
         # По идее надо округлять до 2 цифр после запятой, но с финансовой точки зрения это будет некорректно
         # result = round(convert_currency(amount, from_cur, dist_currency), 2)
         print(f'{amount} {from_cur} в {dist_currency} будет {result}')
 
-    return result
+    return res
 
 
 if __name__ == "__main__":
@@ -55,4 +53,3 @@ if __name__ == "__main__":
 
 # Вызов внешней функции по конвертации валют через сайт
     result = calculate_transaction_amount(f[41])
-

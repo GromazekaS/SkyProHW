@@ -1,5 +1,6 @@
-from unittest.mock import patch, Mock
 import os
+from unittest.mock import Mock, patch
+
 from src.external_api import convert_currency
 
 

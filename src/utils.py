@@ -1,5 +1,6 @@
 import json
 from pprint import pprint
+
 from src.external_api import convert_currency
 
 

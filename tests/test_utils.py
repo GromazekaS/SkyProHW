@@ -1,7 +1,7 @@
-from unittest.mock import patch, mock_open
 import json
+from unittest.mock import mock_open, patch
 
-from src.utils import get_transactions_from_file, calculate_transaction_amount
+from src.utils import calculate_transaction_amount, get_transactions_from_file
 
 
 def test_get_transactions_from_valid_file(transactions_test):

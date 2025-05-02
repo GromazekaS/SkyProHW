@@ -40,16 +40,21 @@ def calculate_transaction_amount(transaction: dict, dist_currency: str='RUB') ->
         res = convert_currency(amount, from_cur, dist_currency)
         # По идее надо округлять до 2 цифр после запятой, но с финансовой точки зрения это будет некорректно
         # result = round(convert_currency(amount, from_cur, dist_currency), 2)
-        print(f'{amount} {from_cur} в {dist_currency} будет {result}')
+        print(f'{amount} {from_cur} в {dist_currency} будет {res}, {type(res)}')
 
     return res
+'''
 
-
-if __name__ == "__main__":
+def main():
     """Локальная проверка функций"""
     file = 'operations.json'
     filepath = '../data/' + file
     f = get_transactions_from_file(filepath)
 
-# Вызов внешней функции по конвертации валют через сайт
+    # Вызов внешней функции по конвертации валют через сайт
     result = calculate_transaction_amount(f[41])
+    print(result)
+
+
+if __name__ == "__main__":
+    main()'''

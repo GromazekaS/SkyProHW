@@ -13,7 +13,7 @@ def test_convert_currency(mock_request):
         'query': {'from': 'EUR', 'to': 'RUB', 'amount': 100},
         'info': {'timestamp': 1746107344, 'quote': 92.657461},
         'result': 9265.7461}
-    mock_getenv = Mock(return_value = '012345')
+    mock_getenv = Mock(return_value='012345')
     os.getenv = mock_getenv
 #    mock_getenv.return_value = '012345'
     assert convert_currency('100', 'EUR', 'RUB') == 9265.7461

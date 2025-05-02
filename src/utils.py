@@ -18,7 +18,7 @@ def get_transactions_from_file(path: str) -> list[dict]:
             print("Успешно загружено {} записей".format(len(data)))
         else:
             print("Файл имеет некорректную структуру")
-            data =[]
+            data = []
 
     except FileNotFoundError:
         print("Файл не найден")
@@ -29,7 +29,7 @@ def get_transactions_from_file(path: str) -> list[dict]:
     return data
 
 
-def calculate_transaction_amount(transaction: dict, dist_currency: str='RUB') -> float:
+def calculate_transaction_amount(transaction: dict, dist_currency: str = 'RUB') -> float:
     """Пересчет суммы транзакции в заданной валюте"""
     pprint(transaction)
     amount = transaction["operationAmount"]["amount"]
@@ -44,6 +44,8 @@ def calculate_transaction_amount(transaction: dict, dist_currency: str='RUB') ->
         print(f'{amount} {from_cur} в {dist_currency} будет {res}, {type(res)}')
 
     return res
+
+
 '''
 
 def main():

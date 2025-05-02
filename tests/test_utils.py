@@ -18,8 +18,10 @@ def test_get_transactions_file_not_found():
 
 
 def test_get_transactions_invalid_json():
-    with patch("builtins.open", mock_open(read_data="INVALID_JSON")), \
-         patch("json.load", side_effect=json.JSONDecodeError("msg", "", 0)):
+    with (
+        patch("builtins.open", mock_open(read_data="INVALID_JSON")),
+        patch("json.load", side_effect=json.JSONDecodeError("msg", "", 0)),
+    ):
         result = get_transactions_from_file("invalid.json")
         assert result == []
 
@@ -35,22 +37,16 @@ test = {
     "id": 41428829,
     "state": "EXECUTED",
     "date": "2019-07-03T18:35:29.512364",
-    "operationAmount": {
-        "amount": "8221.37",
-        "currency": {
-            "name": "USD",
-            "code": "USD"
-        }
-    },
+    "operationAmount": {"amount": "8221.37", "currency": {"name": "USD", "code": "USD"}},
     "description": "Перевод организации",
     "from": "MasterCard 7158300734726758",
-    "to": "Счет 35383033474447895560"
+    "to": "Счет 35383033474447895560",
 }
 
 
-@patch('src.utils.convert_currency')
+@patch("src.utils.convert_currency")
 def test_calculate_transaction_amount(mock_convert_currency):
     mock_convert_currency.return_value = 9265.7461
-    assert calculate_transaction_amount(test, 'RUB') == 9265.7461
+    assert calculate_transaction_amount(test, "RUB") == 9265.7461
 
-    mock_convert_currency.assert_called_once_with(*('8221.37', 'USD', 'RUB'))
+    mock_convert_currency.assert_called_once_with(*("8221.37", "USD", "RUB"))

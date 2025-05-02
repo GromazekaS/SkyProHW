@@ -10,7 +10,7 @@ def get_transactions_from_file(path: str) -> list[dict]:
     data = []
     try:
         # Пробуем открыть файл
-        with open(path, 'r', encoding='utf-8') as json_file:
+        with open(path, "r", encoding="utf-8") as json_file:
             data = json.load(json_file)
 
         # Проверка структуры данных
@@ -29,19 +29,19 @@ def get_transactions_from_file(path: str) -> list[dict]:
     return data
 
 
-def calculate_transaction_amount(transaction: dict, dist_currency: str = 'RUB') -> float:
+def calculate_transaction_amount(transaction: dict, dist_currency: str = "RUB") -> float:
     """Пересчет суммы транзакции в заданной валюте"""
     pprint(transaction)
     amount = transaction["operationAmount"]["amount"]
     from_cur = transaction["operationAmount"]["currency"]["code"]
     if from_cur == dist_currency:
         res = float(amount)
-        print(f'Конвертация не требуется. {amount} {dist_currency}')
+        print(f"Конвертация не требуется. {amount} {dist_currency}")
     else:
         res = convert_currency(amount, from_cur, dist_currency)
         # По идее надо округлять до 2 цифр после запятой, но с финансовой точки зрения это будет некорректно
         # result = round(convert_currency(amount, from_cur, dist_currency), 2)
-        print(f'{amount} {from_cur} в {dist_currency} будет {res}, {type(res)}')
+        print(f"{amount} {from_cur} в {dist_currency} будет {res}, {type(res)}")
 
     return res
 

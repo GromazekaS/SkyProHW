@@ -14,10 +14,8 @@ def convert_currency(amount: str, form_currency: str, to_currency: str) -> float
 
     url = f"https://api.apilayer.com/currency_data/convert?to={to_currency}&from={form_currency}&amount={amount}"
 
-    headers = {
-        "apikey": apilayer_api_key
-    }
-    payload : dict[str, str] = {}
+    headers = {"apikey": apilayer_api_key}
+    payload: dict[str, str] = {}
 
     response = requests.request("GET", url, headers=headers, data=payload)
 
@@ -28,6 +26,6 @@ def convert_currency(amount: str, form_currency: str, to_currency: str) -> float
     # 'query': {'from': 'EUR', 'to': 'RUB', 'amount': 100},
     # 'info': {'timestamp': 1746107344, 'quote': 92.657461},
     # 'result': 9265.7461}
-    print(f'Статус запроса курса конвертации: {status_code}')
-    print(f'Результат запроса: {result}')
+    print(f"Статус запроса курса конвертации: {status_code}")
+    print(f"Результат запроса: {result}")
     return float(result["result"])

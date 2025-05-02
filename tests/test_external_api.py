@@ -16,7 +16,7 @@ def test_convert_currency(mock_request):
     mock_getenv = Mock(return_value = '012345')
     os.getenv = mock_getenv
 #    mock_getenv.return_value = '012345'
-    assert convert_currency(100, 'EUR', 'RUB') == 9265.7461
+    assert convert_currency('100', 'EUR', 'RUB') == 9265.7461
     mock_request.assert_called_once_with(
         'GET',
         'https://api.apilayer.com/currency_data/convert?to=RUB&from=EUR&amount=100',

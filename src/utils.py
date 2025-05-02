@@ -35,7 +35,7 @@ def calculate_transaction_amount(transaction: dict, dist_currency: str='RUB') ->
     amount = transaction["operationAmount"]["amount"]
     from_cur = transaction["operationAmount"]["currency"]["code"]
     if from_cur == dist_currency:
-        res = amount
+        res = float(amount)
         print(f'Конвертация не требуется. {amount} {dist_currency}')
     else:
         res = convert_currency(amount, from_cur, dist_currency)

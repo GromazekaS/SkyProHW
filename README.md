@@ -64,3 +64,5 @@
 ## Логирование:
 1. widget.py
 2. utils.py
+3. masks.py
+

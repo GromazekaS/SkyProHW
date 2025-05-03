@@ -1,12 +1,14 @@
 import json
 import logging
-# from pprint import pprint
 
 from src.external_api import convert_currency
 
+# from pprint import pprint
+
+
 logger = logging.getLogger(__name__)
-file_handler = logging.FileHandler('..\logs\log_utils.log', "w",encoding='utf-8')
-file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s: %(message)s')
+file_handler = logging.FileHandler("../logs/log_utils.log", "w", encoding="utf-8")
+file_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s: %(message)s")
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 logger.setLevel(logging.DEBUG)
@@ -23,7 +25,7 @@ def get_transactions_from_file(path: str) -> list[dict]:
             data = json.load(json_file)
 
         # Проверка структуры данных
-        logger.info(f"Проверяем структуру считанных данных в файле")
+        logger.info("Проверяем структуру считанных данных в файле")
         if isinstance(data, list) and all(isinstance(item, dict) for item in data):
             logger.info("Успешно загружено {} записей".format(len(data)))
         else:

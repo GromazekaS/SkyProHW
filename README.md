@@ -60,3 +60,9 @@
 3. test_get_transactions_invalid_json - проверка отклика на неправильный json
 4. test_get_transactions_invalid_structure - проверка отклика на неправильную структуру json-файла
 5. test_calculate_transaction_amount - проверка корректной работы
+
+## Логирование:
+1. widget.py
+2. utils.py
+3. masks.py
+

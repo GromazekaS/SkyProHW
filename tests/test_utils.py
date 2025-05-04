@@ -1,6 +1,6 @@
 import json
-from unittest.mock import mock_open, patch, MagicMock
 from typing import Any
+from unittest.mock import MagicMock, mock_open, patch
 
 from src.utils import calculate_transaction_amount, get_transactions_from_file
 

@@ -1,5 +1,5 @@
 import os
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import MagicMock, Mock, patch
 
 from src.external_api import convert_currency
 

@@ -1,3 +1,4 @@
+from typing import Generator
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -9,7 +10,7 @@ def disable_logging_file_handler():
 
 
 @pytest.fixture(autouse=True)
-def mock_entire_logger():
+def mock_entire_logger() -> Generator[MagicMock, None, None]:
     with patch("src.logger.logging.getLogger") as mock_get_logger:
         mock_logger = MagicMock()
         mock_get_logger.return_value = mock_logger

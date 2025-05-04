@@ -30,6 +30,7 @@ types-requests = "^2.32.0.20250328"
 pytest = "^8.3.5"
 pytest-cov = "^6.1.1"
 requests = "^2.32.3"
+pandas-stubs = "^2.2.3.250308"
 
 [tool.mypy]
 disallow_untyped_defs = true

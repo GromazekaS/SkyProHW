@@ -1,6 +1,8 @@
-from unittest.mock import mock_open, patch
+from unittest.mock import MagicMock, mock_open, patch
 
+import pandas as pd
 import pytest
+from pandas import DataFrame
 
 from src.file_system import get_transactions_from_csv_file, get_transactions_from_excel_file
 
@@ -36,7 +38,9 @@ def mock_csv_data() -> list[list[str]]:
 
 @patch("src.file_system.csv.reader")
 @patch("builtins.open", new_callable=mock_open)
-def test_get_transactions_from_csv_file_success(mock_open_file, mock_read_csv, mock_csv_data):
+def test_get_transactions_from_csv_file_success(
+    mock_open_file: MagicMock, mock_read_csv: MagicMock, mock_csv_data: list[list[str]]
+) -> None:
     mock_read_csv.return_value = iter(mock_csv_data)
     print(mock_csv_data)
 
@@ -55,16 +59,14 @@ def test_get_transactions_from_csv_file_success(mock_open_file, mock_read_csv, m
 
 @patch("src.file_system.logger")
 @patch("src.file_system.csv.reader", side_effect=FileNotFoundError)
-def test_get_transactions_from_csv_file_file_not_found(mock_read_csv, mock_logger):
+def test_get_transactions_from_csv_file_file_not_found(mock_read_csv: list[list[str]], mock_logger: MagicMock) -> None:
     result = get_transactions_from_csv_file("nonexistent_file.xlsx")
     assert result == []
     mock_logger.error.assert_called_with("Файл не найден")
 
 
 @pytest.fixture
-def mock_excel_data():
-    import pandas as pd
-
+def mock_excel_data() -> DataFrame:
     return pd.DataFrame(
         [
             {
@@ -94,7 +96,7 @@ def mock_excel_data():
 
 
 @patch("src.file_system.pd.read_excel")
-def test_get_transactions_from_excel_file_success(mock_read_excel, mock_excel_data):
+def test_get_transactions_from_excel_file_success(mock_read_excel: MagicMock, mock_excel_data: DataFrame) -> None:
     mock_read_excel.return_value = mock_excel_data
 
     result = get_transactions_from_excel_file("fake_path.xlsx")
@@ -112,7 +114,7 @@ def test_get_transactions_from_excel_file_success(mock_read_excel, mock_excel_da
 
 @patch("src.file_system.logger")
 @patch("src.file_system.pd.read_excel", side_effect=FileNotFoundError)
-def test_get_transactions_from_excel_file_file_not_found(mock_read_excel, mock_logger):
+def test_get_transactions_from_excel_file_file_not_found(mock_read_excel: MagicMock, mock_logger: MagicMock) -> None:
     result = get_transactions_from_excel_file("nonexistent_file.xlsx")
     assert result == []
     mock_logger.error.assert_called_with("Файл не найден")
@@ -120,7 +122,7 @@ def test_get_transactions_from_excel_file_file_not_found(mock_read_excel, mock_l
 
 @patch("src.file_system.logger")
 @patch("src.file_system.pd.read_excel", side_effect=Exception("Непредвиденная ошибка"))
-def test_get_transactions_from_excel_file_generic_error(mock_read_excel, mock_logger):
+def test_get_transactions_from_excel_file_generic_error(mock_read_excel: MagicMock, mock_logger: MagicMock) -> None:
     result = get_transactions_from_excel_file("error_file.xlsx")
     assert result == []
     mock_logger.error.assert_called_with("Произошла ошибка: Непредвиденная ошибка")

@@ -1,23 +1,24 @@
 import json
-from unittest.mock import mock_open, patch
+from unittest.mock import mock_open, patch, MagicMock
+from typing import Any
 
 from src.utils import calculate_transaction_amount, get_transactions_from_file
 
 
-def test_get_transactions_from_valid_file(transactions_test):
+def test_get_transactions_from_valid_file(transactions_test: list[dict[str, Any]]) -> None:
     mock_data = json.dumps(transactions_test)
     with patch("builtins.open", mock_open(read_data=mock_data)):
         result = get_transactions_from_file("dummy_path.json")
         assert result == transactions_test
 
 
-def test_get_transactions_file_not_found():
+def test_get_transactions_file_not_found() -> None:
     with patch("builtins.open", side_effect=FileNotFoundError()):
         result = get_transactions_from_file("not_found.json")
         assert result == []
 
 
-def test_get_transactions_invalid_json():
+def test_get_transactions_invalid_json() -> None:
     with (
         patch("builtins.open", mock_open(read_data="INVALID_JSON")),
         patch("json.load", side_effect=json.JSONDecodeError("msg", "", 0)),
@@ -26,7 +27,7 @@ def test_get_transactions_invalid_json():
         assert result == []
 
 
-def test_get_transactions_invalid_structure():
+def test_get_transactions_invalid_structure() -> None:
     bad_structure = json.dumps({"not": "a list"})
     with patch("builtins.open", mock_open(read_data=bad_structure)):
         result = get_transactions_from_file("bad_struct.json")
@@ -45,7 +46,7 @@ test = {
 
 
 @patch("src.utils.convert_currency")
-def test_calculate_transaction_amount(mock_convert_currency):
+def test_calculate_transaction_amount(mock_convert_currency: MagicMock) -> None:
     mock_convert_currency.return_value = 9265.7461
     assert calculate_transaction_amount(test, "RUB") == 9265.7461
 

@@ -1,4 +1,20 @@
+from unittest.mock import MagicMock, patch
+
 import pytest
+
+"""@pytest.fixture(autouse=True)
+def disable_logging_file_handler():
+    with patch("src.logger.logging.FileHandler") as mock_handler:
+        yield mock_handler  # Можно использовать в тестах, если надо"""
+
+
+@pytest.fixture(autouse=True)
+def mock_entire_logger():
+    with patch("src.logger.logging.getLogger") as mock_get_logger:
+        mock_logger = MagicMock()
+        mock_get_logger.return_value = mock_logger
+        yield mock_logger
+
 
 card_acc_test = [
     ("Maestro 1596837868705199", "Maestro 1596 83** **** 5199"),

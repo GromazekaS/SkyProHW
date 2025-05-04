@@ -1,5 +1,5 @@
 import os
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, MagicMock
 
 from src.external_api import convert_currency
 
@@ -7,7 +7,7 @@ from src.external_api import convert_currency
 @patch("requests.request")
 # @patch('os.getenv')
 # def test_convert_currency(mock_getenv, mock_request):
-def test_convert_currency(mock_request):
+def test_convert_currency(mock_request: MagicMock) -> None:
     mock_request.return_value.json.return_value = {
         "success": True,
         "query": {"from": "EUR", "to": "RUB", "amount": 100},

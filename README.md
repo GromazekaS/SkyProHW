@@ -18,7 +18,13 @@
 11. Модуль utils.py:
 
     11.1 Функция get_from_file - считывание данных о транзакциях из json-файла
+
     11.2 Функция calculate_transaction_amount - расчет суммы операции в другой валюте
+12. Модуль file_system.py:
+
+    12.1 Функция get_transactions_from_csv_file- считывание данных о транзакциях из csv-файла
+
+    12.2 Функция get_transactions_from_excel_file- считывание данных о транзакциях из excel-файла
 
 ## Тестирование проекта:
 ### Тестирование masks.py
@@ -61,8 +67,16 @@
 4. test_get_transactions_invalid_structure - проверка отклика на неправильную структуру json-файла
 5. test_calculate_transaction_amount - проверка корректной работы
 
+### Тестирование file_system.py
+1. test_get_transactions_from_csv_file_success - проверка корректной работы
+2. test_get_transactions_from_csv_file_file_not_found - проверка отклика на отсутствующий файл
+3. test_get_transactions_from_excel_file_success - проверка корректной работы
+4. test_get_transactions_from_excel_file_file_not_found - проверка отклика на отсутствующий файл
+5. test_get_transactions_from_excel_file_generic_error - проверка отклика на неожиданную ошибку
+
 ## Логирование:
 1. widget.py
 2. utils.py
 3. masks.py
+4. file_system.py
 

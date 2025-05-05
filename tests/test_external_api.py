@@ -1,7 +1,7 @@
 import os
 from unittest.mock import MagicMock, Mock, patch
 
-from src.external_api import convert_currency
+from src.external_api import convert_currency, calculate_transaction_amount
 
 
 @patch("requests.request")
@@ -24,3 +24,22 @@ def test_convert_currency(mock_request: MagicMock) -> None:
         headers={"apikey": mock_getenv.return_value},
         data={},
     )
+
+
+test = {
+    "id": 41428829,
+    "state": "EXECUTED",
+    "date": "2019-07-03T18:35:29.512364",
+    "operationAmount": {"amount": "8221.37", "currency": {"name": "USD", "code": "USD"}},
+    "description": "Перевод организации",
+    "from": "MasterCard 7158300734726758",
+    "to": "Счет 35383033474447895560",
+}
+
+
+@patch("src.external_api.convert_currency")
+def test_calculate_transaction_amount(mock_convert_currency: MagicMock) -> None:
+    mock_convert_currency.return_value = 9265.7461
+    assert calculate_transaction_amount(test, "RUB") == 9265.7461
+
+    mock_convert_currency.assert_called_once_with(*("8221.37", "USD", "RUB"))

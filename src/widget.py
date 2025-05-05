@@ -1,14 +1,8 @@
-import logging
-
-# from src.decorators import log, timing
+from src.decorators import log, timing
+from src.logger import logger_setup
 from src.masks import get_mask_account, get_mask_card_number
 
-logger = logging.getLogger(__name__)
-file_handler = logging.FileHandler("../logs/widget.log", "w", encoding="utf-8")
-file_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s: %(message)s")
-file_handler.setFormatter(file_formatter)
-logger.addHandler(file_handler)
-logger.setLevel(logging.DEBUG)
+logger = logger_setup("widget")
 
 
 # @log("log_widget.txt")
@@ -36,8 +30,8 @@ def mask_account_card(data: str) -> str:
     return result
 
 
-# @log(None)
-# @timing
+@log(None)
+@timing
 def get_date(date: str) -> str:
     """Вернуть дату в формате ДД.ММ.ГГГГ"""
     result = ""

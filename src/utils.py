@@ -1,17 +1,11 @@
 import json
-import logging
 
 from src.external_api import convert_currency
 
 # from pprint import pprint
+from src.logger import logger_setup
 
-
-logger = logging.getLogger(__name__)
-file_handler = logging.FileHandler("../logs/log_utils.log", "w", encoding="utf-8")
-file_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s: %(message)s")
-file_handler.setFormatter(file_formatter)
-logger.addHandler(file_handler)
-logger.setLevel(logging.DEBUG)
+logger = logger_setup("utils")
 
 
 def get_transactions_from_file(path: str) -> list[dict]:

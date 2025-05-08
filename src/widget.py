@@ -30,8 +30,8 @@ def mask_account_card(data: str) -> str:
     return result
 
 
-@log(None)
-@timing
+# @log(None)
+# @timing
 def get_date(date: str) -> str:
     """Вернуть дату в формате ДД.ММ.ГГГГ"""
     result = ""

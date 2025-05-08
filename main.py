@@ -1,31 +1,115 @@
+from click import pass_obj
+
+from src.logger import logger_setup
+from src.processing import filter_by_state, sort_by_date, category_counter, filter_by_pattern
+from src.utils import get_transactions_from_file, get_transactions_from_csv_file, get_transactions_from_excel_file
 from src.widget import get_date, mask_account_card
 
-# from src.processing import filter_by_state, sort_by_date
-# from tests.conftest import processing_test  # , date_test, input_data_test
+PATH_PREFIX = 'data/'
+logger = logger_setup('main')
+
+
+def check_validity_state(state: str) -> str | bool:
+    """Проверить ввод пользователя"""
+    # print(f"Проверяем {state}, {ord(state[0])}")
+    if state.upper() in ['E', 'EXECUTED']: return 'EXECUTED'
+    if state.upper() in ['C', 'CANCELED']: return 'CANCELED'
+    if state.upper() in ['P', 'PENDING']: return 'PENDING'
+    return False
+
+
+def display_transactions(transactions_list: list[dict], category : str) -> None:
+    """Отобразить банковские операции из выборки"""
+    if category:
+        print(f"Вывод транзакций по категории {category}\n")
+        transactions_list = filter_by_pattern(category, transactions_list)
+    else:
+        print("Вывод транзакций по всем категориям: \n")
+    print('Всего банковских операций в выборке: ', len(transactions_list), '\n')
+    for item in transactions_list:
+        print(f"{get_date(item['date'])} {item['description']}")
+        if category == 'Открытие вклада':
+            print(f"{mask_account_card(item['to'])}")
+        else:
+            print(f"{mask_account_card(item['from'])} - > {mask_account_card(item['to'])}")
+        value = item['operationAmount']
+        print(f"Сумма: {value['amount']} {value['currency']['name']}\n")
 
 
 def main() -> None:
     """Основная часть программы!!!"""
+    print("Привет! Добро пожаловать в программу работы с банковскими транзакциями.\n"
+          "О каких транзакциях Вы желаете получить информацию:\n"
+          "1. Получить информацию о транзакциях из JSON-файла\n"
+          "2. Получить информацию о транзакциях из CSV-файла\n"
+          "3. Получить информацию о транзакциях из XLSX-файла")
+    menu = ['operations.json', 'transactions.csv', 'transactions_excel.xlsx']
+    menu_choice = int(input("Выберите необходимый пункт меню (1/2/3): "))
 
-    # Обертка @log (без имени файла логирования) и @timing
-    get_date("2024-03-11T02:26:18.671407")
+    filename = menu[menu_choice - 1]
+    logger.info(f"Пользователь выбрал загрузить транзакции из {filename}")
+    get_transactions = {'operations.json': get_transactions_from_file,
+                        'transactions.csv': get_transactions_from_csv_file,
+                        'transactions_excel.xlsx': get_transactions_from_excel_file}
+    print(f"Загружаю список транзакций из {PATH_PREFIX+filename}")
+    transactions = get_transactions[filename](PATH_PREFIX+filename)
+    logger.info(f"Загружено {len(transactions)} транзакций")
 
-    # Обертка @log (log_widget.txt) и @timing
-    mask_account_card("MasterCard 7158300734726758")
+    logger.info("Запрашиваем параметр фильтра по статусу транзакции")
+    state_checked = False
+    while not state_checked:
+        print("Введите статус, по которому необходимо выполнить фильтрацию.\n"
+              "Доступные для фильтровки статусы: EXECUTED, CANCELED, PENDING")
+        state = input("[E]XECUTED/[C]ANCELED/[P]ENDING: ").upper()
+        state_checked = check_validity_state(state)
+        print(f'Статус: {state_checked}')
+        if not state_checked:
+            print(f'Статус операции {state} недоступен.')
+            state_checked = False
 
-    # Проверка извлечения оригинальной функции из под двух оберток
-    g = get_date
-    print(g.__wrapped__.__wrapped__("2024-03-11T02:26:18.671407"))
+    logger.info(f"Фильтрую транзакции по статусу {state_checked}")
+    transactions_by_state = filter_by_state(transactions, state_checked)
+    print(len(transactions_by_state))
+    logger.info(f"После фильтрации по статусу транзакции осталось {len(transactions_by_state)} записей")
+    if len(transactions_by_state) == 0:
+        print("Нет транзакций подходящих под выбранные условия")
+    else:
+        logger.info("Сортировка списка транзакций по дате")
+        print("Отсортировать операции по дате?")
+        sort_choice = input("Да[Y] / Нет[N]: ")
+        if sort_choice in ["y", "Y"]:
+            print("Отсортировать по возрастанию?")
+            asc_choice = input("Да[Y] / Нет[N]: ")
+            if asc_choice in ["y", "Y"]:
+                logger.info("Транзакции отсортированы по возрастанию")
+                asc_choice = False
+            else:
+                logger.info("Транзакции отсортированы по убыванию")
+                asc_choice = True
+            transactions_by_state = sort_by_date(transactions_by_state, asc_choice)
+        else:
+            logger.info("Транзакции остались без сортировки")
 
+        logger.info("Сортировка по валюте")
+        print("Выводить только рублевые транзакции?")
+        currency_choice = input("Да[Y] / Нет[N]: ")
+        if currency_choice in ["y", "Y"]:
+            transactions_by_state = [x for x in transactions_by_state if x["operationAmount"]["currency"]["code"] == 'RUB']
+            logger.info(f"Оставляем только рублевые операции {len(transactions_by_state)}")
 
-#    for test in input_data_test:
-#        print(mask_account_card(test))
-#    for test in date_test:
-#        print(get_date(test))
-#    print(filter_by_state(processing_test))
-#    print(filter_by_state(processing_test, 'CANCELED'))
-#    print(sort_by_date(processing_test))
-#    print(sort_by_date(processing_test, True))
+        cat_list = []
+        categories = category_counter(transactions_by_state, [])
+        print(f"Вывести все категории? - {sum(categories.values())} записей")
+        cat_choice = input("Да[Y] / Нет[N]: ")
+        if cat_choice in ["y", "Y"]:
+            display_transactions(transactions_by_state, '')
+        else:
+            print("Выберите категории для отображения:")
+            for index, category in enumerate(categories):
+                print(f"{index + 1}. Вывести категорию '{category}' - {categories[category]} записей")
+                cat_list.append(category)
+            output_cat_list_choice = input("Введите номер категорий для вывода: ").strip()
+            display_transactions(transactions_by_state, cat_list[(int(output_cat_list_choice) - 1)])
 
 
 if __name__ == "__main__":

@@ -48,7 +48,7 @@ def get_transactions_from_csv_file(path: str, delimiter: str = ",") -> list[dict
         with open(path, encoding="utf-8") as csv_file:
             csv_data = csv.reader(csv_file, delimiter=delimiter)
             headers = next(csv_data)
-            print(type(csv_data))
+            # print(type(csv_data))
             for line in csv_data:
                 transaction: dict = {"operationAmount": {"currency": {}}}
                 for i in range(len(headers)):

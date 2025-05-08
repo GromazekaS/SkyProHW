@@ -1,5 +1,6 @@
 # Учебный проект для изучения основ программирования на Python и освоения инструментов разработки
-Проект по учету работы с банковскими картами
+Проект по учету работы с банковскими картами. Предоставляет в виде вывода на экран выборку транзакций, считанных из файла (доступные форматы: .json, .csv, .xlsx) во вложенной папке /data.
+Позволяет отфильтровать данные по категориям операций, по валюте, по состоянию и отсортировать по дате.
 
 ## Функционал проекта:
 1. Функции get_mask_account() и get_mask_card_number() для маскирования номера счет и номера банковской карты (masks.py).
@@ -22,9 +23,15 @@
     11.2 Функция calculate_transaction_amount - расчет суммы операции в другой валюте
 12. Модуль file_system.py:
 
-    12.1 Функция get_transactions_from_csv_file- считывание данных о транзакциях из csv-файла
+    12.1 Функция get_transactions_from_csv_file - считывание данных о транзакциях из csv-файла
 
-    12.2 Функция get_transactions_from_excel_file- считывание данных о транзакциях из excel-файла
+    12.2 Функция get_transactions_from_excel_file - считывание данных о транзакциях из excel-файла
+13. main.py - взаимодействие с пользователем через меню - вопрос/ответ - результат
+
+    13.1 Функция check_validity_state - проверка ввода от пользователя
+   
+    13.2 Функция display_transactions - отображение выборки транзакций
+
 
 ## Тестирование проекта:
 ### Тестирование masks.py
@@ -36,6 +43,8 @@
 ### Тестирование widget.py
 1. test_mask_account_card() - тест с параметризацией, корректность работы функциии
 2. test_get_date() - тест с параметризацией, корректность работы функциии
+3. test_check_validity_state() - проверка корректности ввода пользователя
+4. test_display_transactions() - проверка корректности отображения выборки
 
 ### Тестирование processing.py
 Задана фикстура processing_test
@@ -66,17 +75,15 @@
 3. test_get_transactions_invalid_json - проверка отклика на неправильный json
 4. test_get_transactions_invalid_structure - проверка отклика на неправильную структуру json-файла
 5. test_calculate_transaction_amount - проверка корректной работы
-
-### Тестирование file_system.py
-1. test_get_transactions_from_csv_file_success - проверка корректной работы
-2. test_get_transactions_from_csv_file_file_not_found - проверка отклика на отсутствующий файл
-3. test_get_transactions_from_excel_file_success - проверка корректной работы
-4. test_get_transactions_from_excel_file_file_not_found - проверка отклика на отсутствующий файл
-5. test_get_transactions_from_excel_file_generic_error - проверка отклика на неожиданную ошибку
+6. test_get_transactions_from_csv_file_success - проверка корректной работы
+7. test_get_transactions_from_csv_file_file_not_found - проверка отклика на отсутствующий файл
+8. test_get_transactions_from_excel_file_success - проверка корректной работы
+9. test_get_transactions_from_excel_file_file_not_found - проверка отклика на отсутствующий файл
+10. test_get_transactions_from_excel_file_generic_error - проверка отклика на неожиданную ошибку
 
 ## Логирование:
 1. widget.py
 2. utils.py
 3. masks.py
-4. file_system.py
+4. main.py
 

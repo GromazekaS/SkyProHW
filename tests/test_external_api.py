@@ -1,7 +1,7 @@
 import os
 from unittest.mock import MagicMock, Mock, patch
 
-from src.external_api import convert_currency, calculate_transaction_amount
+from src.external_api import calculate_transaction_amount, convert_currency
 
 
 @patch("requests.request")

@@ -1,7 +1,7 @@
 import pytest
 from _pytest.capture import CaptureFixture
 
-from src.widget import get_date, mask_account_card, check_validity_state, display_transactions
+from src.widget import check_validity_state, display_transactions, get_date, mask_account_card
 from tests.conftest import card_acc_test, date_test, trans_test
 
 

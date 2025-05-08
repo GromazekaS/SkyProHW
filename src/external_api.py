@@ -2,6 +2,7 @@ import os
 
 import requests
 from dotenv import load_dotenv
+
 from src.logger import logger_setup
 
 logger = logger_setup("external_api")

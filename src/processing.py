@@ -1,9 +1,9 @@
 import re
 from collections import Counter
+from pprint import pprint
+
 from src.logger import logger_setup
 from tests.conftest import trans_test
-
-from pprint import pprint
 
 logger = logger_setup('processing')
 

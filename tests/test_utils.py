@@ -2,11 +2,11 @@ import json
 from typing import Any
 from unittest.mock import MagicMock, mock_open, patch
 
-from src.utils import get_transactions_from_file, get_transactions_from_csv_file, get_transactions_from_excel_file
-
 import pandas as pd
 import pytest
 from pandas import DataFrame
+
+from src.utils import get_transactions_from_csv_file, get_transactions_from_excel_file, get_transactions_from_file
 
 
 def test_get_transactions_from_valid_file(transactions_test: list[dict[str, Any]]) -> None:

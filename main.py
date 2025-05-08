@@ -26,7 +26,7 @@ def main() -> None:
         "transactions.csv": get_transactions_from_csv_file,
         "transactions_excel.xlsx": get_transactions_from_excel_file,
     }
-    print(f"Загружаю список транзакций из {PATH_PREFIX+filename}")
+    print(f"Загружаю список транзакций из {PATH_PREFIX + filename}")
     transactions = get_transactions[filename](PATH_PREFIX + filename)
     logger.info(f"Загружено {len(transactions)} транзакций")
 

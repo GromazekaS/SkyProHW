@@ -1,4 +1,4 @@
-from src.decorators import log, timing
+from src.decorators import log  # , timing
 from src.logger import logger_setup
 from src.masks import get_mask_account, get_mask_card_number
 from src.processing import filter_by_pattern

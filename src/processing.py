@@ -5,7 +5,7 @@ from pprint import pprint
 from src.logger import logger_setup
 from tests.conftest import trans_test
 
-logger = logger_setup('processing')
+logger = logger_setup("processing")
 
 
 def filter_by_state(records_to_filter: list[dict], state: str = "EXECUTED") -> list:
@@ -29,16 +29,16 @@ def sort_by_date(records_to_sort: list, reverse: bool = True) -> list:
 def filter_by_pattern(pattern: str, transactions_list: list[dict]) -> list[dict]:
     """Найти и вернуть список транзакций с заданным шаблоном в описании"""
     result = []
-    logger.info('Начинаем поиск по шаблону в описании транзакций')
+    logger.info("Начинаем поиск по шаблону в описании транзакций")
     for transaction in transactions_list:
-        if re.search(pattern=pattern, string=transaction['description'], flags=0):
+        if re.search(pattern=pattern, string=transaction["description"], flags=0):
             result.append(transaction)
-    logger.info(f'Поиск завершен. Найдено {len(result)} записей, удовлетворяющих шаблону')
+    logger.info(f"Поиск завершен. Найдено {len(result)} записей, удовлетворяющих шаблону")
     return result
 
 
 def category_counter(transaction_list: list[dict], category_list: list) -> dict:
-    category = [x['description'] for x in transaction_list]
+    category = [x["description"] for x in transaction_list]
     result = Counter(category)
 
     if category_list:

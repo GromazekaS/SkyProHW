@@ -36,7 +36,7 @@ validate_state = [
 
 
 @pytest.mark.parametrize("x, expected", validate_state)
-def test_check_validity_state(x: str, expected: str):
+def test_check_validity_state(x: str, expected: str) -> None:
     assert check_validity_state(x) == expected
 
 

@@ -59,11 +59,11 @@ def main() -> None:
             asc_choice = input("Да[Y] / Нет[N]: ")
             if asc_choice in ["y", "Y"]:
                 logger.info("Транзакции отсортированы по возрастанию")
-                asc_choice = False
+                reverse = False
             else:
                 logger.info("Транзакции отсортированы по убыванию")
-                asc_choice = True
-            transactions_by_state = sort_by_date(transactions_by_state, asc_choice)
+                reverse = True
+            transactions_by_state = sort_by_date(transactions_by_state, reverse)
         else:
             logger.info("Транзакции остались без сортировки")
 

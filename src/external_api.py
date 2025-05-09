@@ -3,6 +3,10 @@ import os
 import requests
 from dotenv import load_dotenv
 
+from src.logger import logger_setup
+
+logger = logger_setup("external_api")
+
 load_dotenv()
 
 
@@ -29,3 +33,21 @@ def convert_currency(amount: str, form_currency: str, to_currency: str) -> float
     print(f"Статус запроса курса конвертации: {status_code}")
     print(f"Результат запроса: {result}")
     return float(result["result"])
+
+
+def calculate_transaction_amount(transaction: dict, dist_currency: str = "RUB") -> float:
+    """Пересчет суммы транзакции в заданной валюте"""
+    # pprint(transaction)
+    amount = transaction["operationAmount"]["amount"]
+    from_cur = transaction["operationAmount"]["currency"]["code"]
+    if from_cur == dist_currency:
+        res = float(amount)
+        print(f"Конвертация не требуется. {amount} {dist_currency}")
+    else:
+        logger.info(f"Отправляем запрос на конвертацию {amount} {from_cur} в {dist_currency}")
+        res = convert_currency(amount, from_cur, dist_currency)
+        # По идее надо округлять до 2 цифр после запятой, но с финансовой точки зрения это будет некорректно
+        # result = round(convert_currency(amount, from_cur, dist_currency), 2)
+        logger.info(f"Получен ответ: {res}.")
+
+    return res

@@ -1,9 +1,12 @@
+import csv
 import json
 
-from src.external_api import convert_currency
+import pandas as pd
+
+from src.logger import logger_setup
 
 # from pprint import pprint
-from src.logger import logger_setup
+
 
 logger = logger_setup("utils")
 
@@ -36,22 +39,68 @@ def get_transactions_from_file(path: str) -> list[dict]:
     return data
 
 
-def calculate_transaction_amount(transaction: dict, dist_currency: str = "RUB") -> float:
-    """Пересчет суммы транзакции в заданной валюте"""
-    # pprint(transaction)
-    amount = transaction["operationAmount"]["amount"]
-    from_cur = transaction["operationAmount"]["currency"]["code"]
-    if from_cur == dist_currency:
-        res = float(amount)
-        print(f"Конвертация не требуется. {amount} {dist_currency}")
-    else:
-        logger.info(f"Отправляем запрос на конвертацию {amount} {from_cur} в {dist_currency}")
-        res = convert_currency(amount, from_cur, dist_currency)
-        # По идее надо округлять до 2 цифр после запятой, но с финансовой точки зрения это будет некорректно
-        # result = round(convert_currency(amount, from_cur, dist_currency), 2)
-        logger.info(f"Получен ответ: {res}.")
+def get_transactions_from_csv_file(path: str, delimiter: str = ",") -> list[dict]:
+    """Прочитать csv-файл по указанному пути, вернуть список транзакций"""
+    # Если try не выполнится, функция вернет пустой список
+    result_list = []
+    try:
+        # Пробуем открыть файл
+        logger.info(f"Считываем файл csv {path}")
+        inside_fields = ["amount", "currency_code", "currency_name"]
+        with open(path, encoding="utf-8") as csv_file:
+            csv_data = csv.reader(csv_file, delimiter=delimiter)
+            headers = next(csv_data)
+            # print(type(csv_data))
+            for line in csv_data:
+                transaction: dict = {"operationAmount": {"currency": {}}}
+                for i in range(len(headers)):
+                    if headers[i] in inside_fields:
+                        if headers[i] == "amount":
+                            transaction["operationAmount"][headers[i]] = line[i]
+                        else:
+                            transaction["operationAmount"]["currency"][headers[i].split("_")[-1]] = line[i]
+                    else:
+                        transaction[headers[i]] = line[i]
+                result_list.append(transaction)
+        logger.info(f"Считано {len(result_list)} записей")
+    except FileNotFoundError:
+        logger.error("Файл не найден")
+    except Exception as e:
+        logger.error(f"Произошла ошибка: {str(e)}")
+    logger.info("Завершение обработки файла")
+    return result_list
 
-    return res
+
+def get_transactions_from_excel_file(path: str) -> list[dict]:
+    """Прочитать excel-файл по указанному пути, вернуть список транзакций"""
+    # Если try не выполнится, функция вернет пустой список
+    result_list = []
+    try:
+        # Пробуем открыть файл
+        logger.info(f"Считываем файл excel {path}")
+        excel_data = pd.read_excel(path, dtype=str)
+
+        # Преобразуем считанные линейные данные в привычную структуру transaction
+        inside_fields = ["amount", "currency_code", "currency_name"]
+        for i in range(excel_data.shape[0]):
+            transaction: dict = {"operationAmount": {"currency": {}}}
+            for k in excel_data.iloc[0].keys():
+                if k in inside_fields:
+                    if k == "amount":
+                        transaction["operationAmount"][k] = excel_data.loc[i, k]
+                    else:
+                        transaction["operationAmount"]["currency"][k.split("_")[-1]] = excel_data.loc[i, k]
+                else:
+                    transaction[k] = excel_data.loc[i, k]
+            result_list.append(transaction)
+
+        logger.info(f"Считано {len(result_list)} записей")
+    except FileNotFoundError:
+        logger.error("Файл не найден")
+    except Exception as e:
+        logger.error(f"Произошла ошибка: {str(e)}")
+    logger.info("Завершение обработки файла")
+    return result_list
 
 
 '''
